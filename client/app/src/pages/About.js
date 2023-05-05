@@ -1,11 +1,11 @@
+import React from "react";
 const HomePage = () => {
 
     return (
         <>
             <div>
-                hello homepage
+                hello about page
             </div>
-        
         </>
     )
 }
