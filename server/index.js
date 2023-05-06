@@ -1,13 +1,17 @@
-const cors = require('cors');
-const mongoose = require("mongoose");
 const express = require('express');
 const app = express();
-const { MongoClient } = require("mongodb");
+app.use(express.json());
+
+const cors = require('cors');
+app.use(cors());
+
 const cohere = require("cohere-ai");
 cohere.init("MGAAT2e4klv8XjGbVz9RadJEQ4hro2qts6PX8Dim");
+
+
+const mongoose = require("mongoose");
+const { MongoClient } = require("mongodb");
 const databaseName = "methacks";
-app.use(express.json());
-app.use(cors());
 
 const password = "mongodb+srv://yaobojing:JimYao1234@cluster0.fzznrzn.mongodb.net/?retryWrites=true&w=majority"
 
@@ -53,26 +57,36 @@ app.post('/generate', async (req, res) => {
     console.log(typeof(response.body.generations[0].text));
     console.log(result)
     res.json(JSON.stringify(result2))
+    connect(JSON.parse(JSON.stringify(result2)))
 })
 
-MongoClient.connect(password,
-  { useNewUrlParser: true },
-  function(err, db) {
-    if (err) {
-      console.log(err)
-      return console.log(err);
-    }
-  console.log("Connection established - All Well");
-  var dbo = db.db(databaseName)
+app.get("/mongo", async (req, res) => {
+  connect();
+})
 
-  app.get('/mongo', (req, res) => {
-    dbo.collection("cohere").insertOne({"hi": "it works"});
-    res.send("hey")
+async function insert(client, data) {
+  await client.db("methacks").collection("cohere").insertOne(data, function(err, res) {
+    if (err) throw err;
+    console.log("1 inserted");
+    db.close();
   })
+}
+
+
+async function connect(data){
+  const uri = "mongodb+srv://yaobojing:JimYao1234@cluster0.fzznrzn.mongodb.net/?retryWrites=true&w=majority"
+  const client = new MongoClient(uri);
+ 
+  try {
+      await client.connect();
+      await insert(client, data);
+
+  } catch (e) {
+      console.error(e);
+  } finally {
+      await client.close();
   }
-)
-
-
+}
 
 
 app.listen(process.env.PORT || 27017, () => { console.log("Server started")})

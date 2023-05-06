@@ -12,7 +12,6 @@ const SubmitForm = () => {
   });
   const [submitting, setSubmitting] = useState(false);
   const [hasData, setHasData] = useState(false);
-  const [error, setError] = useState(null);
   const [data, setData] = useState("");
 
   const handleChange = (event) => {
@@ -24,16 +23,15 @@ const SubmitForm = () => {
     event.preventDefault();
     setSubmitting(true);
 
-
     fetch('http://localhost:27017/generate', {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(formData),
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
     })
         .then((response) => response.json())
-        .then((data) => {console.log(data); setData(data)});
+        .then((data) => {setData(data)});
     
     setHasData(true);
     alert('Data submitted successfully');
@@ -53,7 +51,6 @@ const SubmitForm = () => {
     return (
         <div>
           <h1>Submit Data</h1>
-          {error && <p>Error: {error.message}</p>}
           <form onSubmit={handleSubmit}>
             <div>
               <label htmlFor="ingredients">Ingredients:</label>
@@ -99,6 +96,7 @@ const SubmitForm = () => {
             <button type="submit" disabled={submitting}>
               {submitting ? 'Submitting...' : 'Submit'}
             </button>
+
           </form>
         </div>
       );
