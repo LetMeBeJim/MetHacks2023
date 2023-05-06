@@ -38,7 +38,7 @@ const sendDb = async () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     setSubmitting(true);
-
+    console.log(formData)
     const response = await fetch('http://localhost:27017/generate', {
         method: 'POST',
         headers: {
@@ -48,6 +48,7 @@ const sendDb = async () => {
     });
     
     const data = await response.json();
+    console.log(data)
     console.log(JSON.parse(data).result)
     setData(JSON.parse(data).result);
 
@@ -79,56 +80,65 @@ const sendDb = async () => {
             )
             : (
                 <div>
-                    <div className="text-6xl font-bold ">
-                            Put in your ideas!
+                    <div className="row">
+                        <div className="col"/>
+                        <div className="col">
+                            <div className="text-6xl font-bold ">
+                                Put in your ideas!
+                            </div>
+                            <div className="h-[15vh]"></div>
+                            <div className="w-[60vw] bg-[#d2ff70] py-10 h-[30vh]">
+                                <form onSubmit={handleSubmit} className="h-full">
+                                    <div className="row h-[20%] py-2 pr-8">
+                                    <label className="col" htmlFor="ingredients">Ingredients:</label>
+                                    <input className="col"
+                                        id="ingredients"
+                                        name="ingredients"
+                                        value={formData.ingredients}
+                                        onChange={handleChange}
+                                        required
+                                    />
+                                    </div>
+                                    <div className="row h-[20%] py-2 pr-8">
+                                    <label className="col" htmlFor="ethnicity">Ethnicity:</label>
+                                    <input className="col"
+                                        id="ethnicity"
+                                        name="ethnicity"
+                                        value={formData.ethnicity}
+                                        onChange={handleChange}
+                                        required
+                                    />
+                                    </div>
+                                    <div className="row h-[20%] py-2 pr-8">
+                                    <label className="col" htmlFor="time">Time:</label>
+                                    <input className="col"
+                                        id="time"
+                                        name="time"
+                                        value={formData.time}
+                                        onChange={handleChange}
+                                        required
+                                    />
+                                    </div>
+                                    <div className="row h-[20%] py-2 pr-8">
+                                    <label className="col" htmlFor="difficulty">Difficulty:</label>
+                                    <input className="col"
+                                        id="difficulty"
+                                        name="difficulty"
+                                        value={formData.difficulty}
+                                        onChange={handleChange}
+                                        required
+                                    />
+                                    </div>
+                            
+                                    <button  className="h-[20%] py-2 pr-8" type="submit" disabled={submitting}>
+                                    {submitting ? 'Submitting...' : 'Submit'}
+                                    </button>
+                                </form>
+                                </div>
+                        </div>
+                        <div className="col"/>
+                    
                     </div>
-                    <div className="h-[15vh]"></div>
-                    <form onSubmit={handleSubmit}>
-                        <div>
-                        <label htmlFor="ingredients">Ingredients:</label>
-                        <input
-                            id="ingredients"
-                            name="ingredients"
-                            value={formData.ingredients}
-                            onChange={handleChange}
-                            required
-                        />
-                        </div>
-                        <div>
-                        <label htmlFor="ethnicity">Ethnicity:</label>
-                        <input
-                            id="ethnicity"
-                            name="ethnicity"
-                            value={formData.ethnicity}
-                            onChange={handleChange}
-                            required
-                        />
-                        </div>
-                        <div>
-                        <label htmlFor="time">Time:</label>
-                        <input
-                            id="time"
-                            name="time"
-                            value={formData.time}
-                            onChange={handleChange}
-                            required
-                        />
-                        </div>
-                        <div>
-                        <label htmlFor="difficulty">Difficulty:</label>
-                        <input
-                            id="difficulty"
-                            name="difficulty"
-                            value={formData.difficulty}
-                            onChange={handleChange}
-                            required
-                        />
-                        </div>
-                
-                        <button type="submit" disabled={submitting}>
-                        {submitting ? 'Submitting...' : 'Submit'}
-                        </button>
-                    </form>
                 </div>
             )
         }

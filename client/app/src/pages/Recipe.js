@@ -23,18 +23,25 @@ const Recipe = () => {
                     <div className="random">
                         <h1>Random Entries!</h1>
                         <div className="row">
-                            <div className="col">
-                                <Score id={data[0].id} score={data[0].score}/>
-                                <p>{data[0].result}</p>
-                            </div>
-                            <div className="col">
-                                <Score id={data[0].id} score={data[0].score}/>
-                                <p>{data[1].result}</p>
-                            </div>
-                            <div className="col">
-                                <Score id={data[0].id} score={data[0].score}/>
-                                <p>{data[2].result}</p>
-                            </div>
+                            <a className="col" style={{ textDecoration: 'none', color: 'black' }} href={"/recipe/"+data[0]._id}>
+                                <div>
+                                    <Score id={data[0]._id} score={data[0].score}/>
+                                    <p>{data[0].result}</p>
+                                </div>
+                            </a>
+                            <a className="col" style={{ textDecoration: 'none', color: 'black'  }} href={"/recipe/"+data[1]._id}>
+                                <div>
+                                    <Score id={data[1]._id} score={data[1].score}/>
+                                    <p>{data[1].result}</p>
+                                </div>
+                            </a>
+                            <a className="col" style={{ textDecoration: 'none', color: 'black'  }} href={"/recipe/"+data[2]._id}>
+                                <div>
+                                    <Score id={data[2]._id} score={data[2].score}/>
+                                    <p>{data[2].result}</p>
+                                </div>
+                            </a>
+                            
                         </div>
                     </div>
                 ) : (
