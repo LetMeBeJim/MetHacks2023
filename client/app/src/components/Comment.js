@@ -4,9 +4,11 @@ const Comment = (props) => {
     const [text, setText] = useState('');
     const [comments, setComments] = useState([]);
 
+    const itemId = props.id
+
     const fetchComments = async () => {
       try {
-        const response = await fetch('http://localhost:27017/comments');
+        const response = await fetch('http://localhost:27017/comments/'+itemId);
         const data = await response.json();
         setComments(data);
       } catch (error) {
@@ -18,7 +20,8 @@ const Comment = (props) => {
       fetchComments();
     }, []);
 
-    const itemId = props.id
+
+
     console.log(itemId);
     const handleNameChange = (e) => {
       setName(e.target.value);
@@ -79,16 +82,28 @@ const Comment = (props) => {
                 </div>
             </div>
             <button onClick={handleSubmit}>Submit</button>
-            <div className="row">
+            {(comments.length !== 0) ? (
+              <div className="row">
               <h2>Comments:</h2>
               <ul>
+                {console.log(comments)}
                 {comments.map((comment, index) => (
                   <li key={index}>
                     User: {comment.name} said : {comment.text}
                   </li>
                 ))}
               </ul>
-            </div>
+              </div>
+            ) : (
+              <>
+              <div className="row">
+                <h2>Comments:</h2>
+                <div>
+                  <p>No one is here yet</p>
+                </div>
+              </div>
+              </>
+            )}
         </>
     )
 }

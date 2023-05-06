@@ -97,18 +97,21 @@ app.get('/take/:id', async (req, res) => {
 })
 
 app.post('/comments', async (req, res) => {
+  console.log("hi")
   await connectComments(req.body);
   res.sendStatus(200)
 })
 
-app.get('/comments', async (req, res) => {
-  response = await connectGetComments();
+app.get('/comments/:id', async (req, res) => {
+  const id = req.params.id;
+  response = await connectGetComments(id);
   console.log(response)
 
   res.json(response)
 })
 
 app.get('/:id', async (req, res) => {
+  console.log("hi")
   const result = await connectFind(req.params.id);
   console.log(result)
   res.json(result)
@@ -116,12 +119,12 @@ app.get('/:id', async (req, res) => {
 
 
 
-async function connectGetComments() {
+async function connectGetComments(id) {
   const uri = "mongodb+srv://yaobojing:JimYao1234@cluster0.fzznrzn.mongodb.net/?retryWrites=true&w=majority"
   const client = new MongoClient(uri);
   try {
     await client.connect();
-    const result = await getComments(client)
+    const result = await getComments(client, id)
     return result;
   } catch (e) {
     console.error(e);
@@ -130,8 +133,8 @@ async function connectGetComments() {
   }
 }
 
-async function getComments(client) {
-  const result = await client.db("methacks").collection("cohere").find({ text: { $exists: true } })
+async function getComments(client, id) {
+  const result = await client.db("methacks").collection("cohere").find({ text: { $exists: true }, entry: id })
   const processed = await result.toArray();
   return processed;
 }
