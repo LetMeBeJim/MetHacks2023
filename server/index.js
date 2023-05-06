@@ -42,15 +42,16 @@ app.post('/generate', async (req, res) => {
     console.log(req.body);
 
     // const testData = {
-    //   "food" : "beef, scallion, potatos, pepper",
+    //   "ingredients" : "beef, scallion, potatos, pepper",
     //   "cuisine" : "asian",
     //   "time" : "fast",
     //   "difficulty" : "easy"
     // }
-
+    const prompt = "Provide a recipe utilizing " + data.ingredients + ". The recipe needs to be " + data.ethnicity + " cuisine. There can only be 10 max ingredients. The difficulty of this recipe should be " + data.difficulty + " and the recipe should be " + data.time + " to make. You must give this recipe a name on the first line. You must write heading for ingredients and steps. The steps must all be numbered"
+    console.log(prompt)
     const response = await cohere.generate({
       model: "command",
-      prompt: "Provide a recipe utilizing " + data.food + ". The recipe needs to be " + data.cuisine + " cuisine. There can only be 10 max ingredients. The difficulty of this recipe should be " + data.difficulty + " and the recipe should be " + data.time + " to make. You must give this recipe a name on the first line. You must write heading for ingredients and steps. The steps must all be numbered",
+      prompt: prompt,
       max_tokens: 1000,
       temperature: 1,
     });
