@@ -4,7 +4,10 @@ const Recipe = () => {
     return (
         <>
             <div>
-                hello recipe page
+                Random Recipe!
+            </div>
+            <div>
+                
             </div>
         </>
     )

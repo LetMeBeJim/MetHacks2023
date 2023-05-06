@@ -24,6 +24,10 @@ app.get('/test', (req, res) => {
     res.json({"not good":"Hey again!"});
 })
 
+app.get('/random', async (req, res) => {
+  const result = await connectRandom();
+  res.json(result);
+})
 
 app.post('/generate', async (req, res) => {
     const data = await req.body;
@@ -43,24 +47,25 @@ app.post('/generate', async (req, res) => {
       temperature: 1,
     });
 
+//use summarize for this? maybe?
+    const tags = await cohere.summarize({
+      text: response.body.generations[0].text,
+      model: 'summarize-xlarge', 
+      length: 'medium',
+      extractiveness: 'medium'
+    })
+
     const result = {
+      "tags": tags,
       "result": response.body.generations[0].text
     }
 
-    // const result2 = {
-    //   "result": "Broccoli Beef\nIngredients:\n1 pound ground beef\n1 bunch scallion\n2 potatos\n1 red pepper\nSteps:\n1. Cook the beef in a pan.\n2. Chop the scallion and the red pepper.\n3. Peel and chop the potatos,\n4. Mix everything together and enjoy\n",
-    // }
-
-//use summarize for this? maybe?
-
-    console.log(typeof(response.body.generations[0].text));
-    console.log(result)
     res.json(JSON.stringify(result))
-    // connect(JSON.parse(JSON.stringify(result)))
+    connect(JSON.parse(JSON.stringify(result)))
 })
 
-app.get('/db', (req, res) => {
-  const string = req.query.string;
+app.post('/db2', async (req, res) => {
+  const string = await req.body;
 
   console.log(string);
   const result = {
@@ -79,6 +84,28 @@ async function insert(client, data) {
   })
 }
 
+async function connectRandom(){
+  const uri = "mongodb+srv://yaobojing:JimYao1234@cluster0.fzznrzn.mongodb.net/?retryWrites=true&w=majority"
+  const client = new MongoClient(uri);
+  try {
+    await client.connect();
+    const result = await random(client);
+    return result;
+  } catch (e) {
+    console.error(e);
+  } finally {
+    await client.close();
+    
+  }
+}
+
+async function random(client){
+  console.log("hi")
+  const result = client.db("methacks").collection("cohere").aggregate([{ $sample: { size: 3 } }]);
+  const processed = await result.toArray();
+  console.log(processed);
+  return processed;
+}
 
 async function connect(data){
   const uri = "mongodb+srv://yaobojing:JimYao1234@cluster0.fzznrzn.mongodb.net/?retryWrites=true&w=majority"

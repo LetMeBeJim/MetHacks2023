@@ -15,12 +15,19 @@ const SubmitForm = () => {
     setData("");
     }
 
-const sendDb = () => { 
+const sendDb = async () => { 
     console.log("send to db");
     console.log(localStorage.getItem('result'));
     const result = localStorage.getItem('result');
     console.log(typeof(result))
-    fetch('http://localhost:27017/db?string='+result)
+    
+    const response = await fetch('http://localhost:27017/db2', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: result,
+    });
 }
   
   const handleChange = (event) => {
