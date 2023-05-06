@@ -84,7 +84,7 @@ const sendDb = async () => {
                         <div className="col"/>
                         <div className="col">
                             <div className="text-6xl font-bold ">
-                                Put in your ideas!
+                                Make A Recipe!
                             </div>
                             <div className="h-[15vh]"></div>
                             <div className="w-[60vw] bg-[#d2ff70] py-10 h-[30vh]">

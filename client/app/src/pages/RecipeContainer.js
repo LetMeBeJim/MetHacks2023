@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from "react-router-dom"
+import Score from '../components/Score';
+import Comment from '../components/Comment';
 
 const RecipeContainer = () => {
   const { id } = useParams()
@@ -23,16 +25,27 @@ const RecipeContainer = () => {
         </div>
         {data ? (
             <div>
-                <div>
-                    {data.tags.body.summary}
+                <div className="row">
+                    <div className="col-2">
+                        <Score id={data._id} score={data.score}/>
+                    </div>
+                    <div className="col-10">
+                        <div>
+                            {data.tags.body.summary}
+                        </div>
+                        <div>
+                            {data.result}
+                        </div>
+                        <div>
+                            {data.score}
+                        </div>
+                    </div>
                 </div>
-                <div>
-                    {data.result}
-                </div>
-                <div>
-                    {data.score}
+                <div className="row">
+                    <Comment id={data._id}/>
                 </div>
             </div>
+            
                 
         ) : (
             <p>loading</p>

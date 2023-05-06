@@ -20,7 +20,7 @@ app.get('/', (req, res) => {
   res.json({"hi":'Hello World!'});
 });
 
-
+//top 5 score recipes
 app.get('/top', async (req, res) => {
     const result = await connectTop();
     res.json(result)
@@ -30,10 +30,12 @@ app.get('/test', (req, res) => {
     res.json({"not good":"Hey again!"});
 })
 
+//randomly selected 3 recipes
 app.get('/random', async (req, res) => {
   const result = await connectRandom();
   res.json(result);
 })
+
 
 app.post('/generate', async (req, res) => {
     const data = await req.body;
@@ -53,7 +55,7 @@ app.post('/generate', async (req, res) => {
       temperature: 1,
     });
 
-//use summarize for this? maybe?
+  //use summarize for this? maybe?
     const tags = await cohere.summarize({
       text: response.body.generations[0].text,
       model: 'summarize-xlarge', 
@@ -99,6 +101,29 @@ app.get('/:id', async (req, res) => {
   res.json(result)
 })
 
+app.post('/comments', async (req, res) => {
+  await connectComments(req.body);
+  res.sendStatus(200)
+})
+
+async function connectComments(info) {
+  const uri = "mongodb+srv://yaobojing:JimYao1234@cluster0.fzznrzn.mongodb.net/?retryWrites=true&w=majority"
+  const client = new MongoClient(uri);
+  try {
+    await client.connect();
+    console.log(info)
+    await comments(client, info)
+
+  } catch (e) {
+    console.error(e);
+  } finally {
+    await client.close();
+  }
+}
+
+async function comments(client, info){
+  const result = await client.db("methacks").collection("cohere").insertOne({entry: info.itemId, name: info.name, text: info.text})
+}
 
 async function connectFind(id) {
   const uri = "mongodb+srv://yaobojing:JimYao1234@cluster0.fzznrzn.mongodb.net/?retryWrites=true&w=majority"

@@ -23,9 +23,9 @@ const Score = (props) => {
     return (
         <>
             <div>
-                <button onClick={() => {addPoint(); increment();}}>+</button>
+                <button className="hover:" onClick={() => {addPoint(); increment();}}>+</button>
             </div>
-            <div>
+            <div className="rounded-full bg-white">
                 {score}
             </div>
             <div>
