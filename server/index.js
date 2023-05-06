@@ -36,11 +36,12 @@ app.post('/generate', async (req, res) => {
 
     const response = await cohere.generate({
       model: "command",
-      prompt: "You need to provide a full response, the recipe has to be complete. Your dish title must be short and concise. You can only use a max token of 400, wrap up all necessary information within 400 tokens. You need to provide a recipe in the format of dish name, ethnicity, ingredients and steps, each begin with a new line. You have to use " + testData.food + " You have to make a " + testData.cuisine + " dish, and the time it takes have to be " + testData.time + " and the difficulty must be " + testData.difficulty,
-      max_tokens: 400,
+      prompt: "You need to provide a full response, the recipe has to be complete. Your dish title must be short and concise. You can only use a max token of 500, wrap up all necessary information within 400 tokens. At the end of your response, you must type 'DONE' on a standalone line. You need to provide a recipe in the format of dish name, ethnicity, ingredients and steps, each begin with a new line. You have to use " + testData.food + " You have to make a " + testData.cuisine + " dish, and the time it takes have to be " + testData.time + " and the difficulty must be " + testData.difficulty,
+      max_tokens: 1000,
       temperature: 1,
     });
 
+    console.log(response.body.generations[0].text);
     res.json(response.body.generations[0].text)
 })
 
