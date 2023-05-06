@@ -96,12 +96,6 @@ app.get('/take/:id', async (req, res) => {
   res.sendStatus(200)
 })
 
-app.get('/:id', async (req, res) => {
-  const result = await connectFind(req.params.id);
-  console.log(result)
-  res.json(result)
-})
-
 app.post('/comments', async (req, res) => {
   await connectComments(req.body);
   res.sendStatus(200)
@@ -109,17 +103,26 @@ app.post('/comments', async (req, res) => {
 
 app.get('/comments', async (req, res) => {
   response = await connectGetComments();
-  result = response.json()
+  console.log(response)
+
+  res.json(response)
+})
+
+app.get('/:id', async (req, res) => {
+  const result = await connectFind(req.params.id);
+  console.log(result)
   res.json(result)
 })
+
+
 
 async function connectGetComments() {
   const uri = "mongodb+srv://yaobojing:JimYao1234@cluster0.fzznrzn.mongodb.net/?retryWrites=true&w=majority"
   const client = new MongoClient(uri);
   try {
     await client.connect();
-    await getComments(client)
-
+    const result = await getComments(client)
+    return result;
   } catch (e) {
     console.error(e);
   } finally {

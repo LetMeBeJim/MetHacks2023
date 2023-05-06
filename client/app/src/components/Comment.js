@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 const Comment = (props) => {
     const [name, setName] = useState('');
     const [text, setText] = useState('');
@@ -17,7 +17,7 @@ const Comment = (props) => {
     useEffect(() => {
       fetchComments();
     }, []);
-    
+
     const itemId = props.id
     console.log(itemId);
     const handleNameChange = (e) => {
@@ -84,7 +84,7 @@ const Comment = (props) => {
               <ul>
                 {comments.map((comment, index) => (
                   <li key={index}>
-                    {comment.name}: {comment.text}
+                    User: {comment.name} said : {comment.text}
                   </li>
                 ))}
               </ul>
