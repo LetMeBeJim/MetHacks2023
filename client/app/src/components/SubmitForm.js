@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link  } from "react-router-dom";
 
 const SubmitForm = () => {
   const [formData, setFormData] = useState({
@@ -10,6 +11,18 @@ const SubmitForm = () => {
   const [submitting, setSubmitting] = useState(false);
   const [data, setData] = useState("");
 
+  const reset = () => {
+    setData("");
+    }
+
+const sendDb = () => { 
+    console.log("send to db");
+    console.log(localStorage.getItem('result'));
+    const result = localStorage.getItem('result');
+    console.log(typeof(result))
+    fetch('http://localhost:27017/db?string='+result)
+}
+  
   const handleChange = (event) => {
     const { name, value } = event.target;
     setFormData({ ...formData, [name]: value });
@@ -32,18 +45,37 @@ const SubmitForm = () => {
     setData(JSON.parse(data).result);
 
     setSubmitting(false);
+    localStorage.setItem('prompt', formData);
+    localStorage.setItem('result', JSON.parse(data).result);
   };
 
     return (
         <div>
             {data ? (
                 <div>
-                    {data}
+                    <div>
+                        {data}
+                    </div>
+                    <div>
+                        <button color="primary" className="px-4"
+                            onClick={sendDb}>
+                                {/* on click animation here */}
+                                Like!
+                            </button>
+                        <button color="primary" 
+                            onClick={reset}>
+                                Generate Another!
+                            </button>
+
+                    </div>
                 </div>
             )
             : (
                 <div>
-                    <h1>Submit Data</h1>
+                    <div className="text-6xl font-bold ">
+                            Put in your ideas!
+                    </div>
+                    <div className="h-[15vh]"></div>
                     <form onSubmit={handleSubmit}>
                         <div>
                         <label htmlFor="ingredients">Ingredients:</label>

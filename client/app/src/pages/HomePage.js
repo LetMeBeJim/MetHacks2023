@@ -5,10 +5,9 @@ import SubmitForm from '../components/SubmitForm';
 const HomePage = () => {
     return (
         <>
-            <div>
-                hello homepage
-            </div>
+            <div className="h-[15vh]"></div>
             <SubmitForm/>
+            <div className="h-[10vh]"></div>
         </>
     )
 }

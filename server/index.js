@@ -29,16 +29,16 @@ app.post('/generate', async (req, res) => {
     const data = await req.body;
     console.log(req.body);
 
-    const testData = {
-      "food" : "beef, scallion, potatos, pepper",
-      "cuisine" : "asian",
-      "time" : "fast",
-      "difficulty" : "easy"
-    }
+    // const testData = {
+    //   "food" : "beef, scallion, potatos, pepper",
+    //   "cuisine" : "asian",
+    //   "time" : "fast",
+    //   "difficulty" : "easy"
+    // }
 
     const response = await cohere.generate({
       model: "command",
-      prompt: "You need to provide a full response, the recipe has to be complete. Your dish title must be short and concise. You can only use a max token of 500, wrap up all necessary information within 400 tokens. You need to provide a recipe in the format of dish name, ethnicity, ingredients and steps, each begin with a new line. You have to use " + data.food + " Your dish absolutely has to be in " + data.cuisine + "culture, and the time it takes have to be " + data.time + " and the difficulty must be " + data.difficulty,
+      prompt: "You need to provide a full response, the recipe has to be complete. Your dish title must be short and concise. You can only use a max token of 500, wrap up all necessary information within 400 tokens. You need to provide a recipe in the format of dish name, ethnicity, ingredients and steps, each begin with a new line. There cannot be more than 10 ingreients. You have to use " + data.food + " Your dish absolutely has to be in " + data.cuisine + "culture, and the time it takes have to be " + data.time + " and the difficulty must be " + data.difficulty,
       max_tokens: 1000,
       temperature: 1,
     });
@@ -47,17 +47,29 @@ app.post('/generate', async (req, res) => {
       "result": response.body.generations[0].text
     }
 
-    const result2 = {
-      "result": "Broccoli Beef\nIngredients:\n1 pound ground beef\n1 bunch scallion\n2 potatos\n1 red pepper\nSteps:\n1. Cook the beef in a pan.\n2. Chop the scallion and the red pepper.\n3. Peel and chop the potatos,\n4. Mix everything together and enjoy\n",
-    }
+    // const result2 = {
+    //   "result": "Broccoli Beef\nIngredients:\n1 pound ground beef\n1 bunch scallion\n2 potatos\n1 red pepper\nSteps:\n1. Cook the beef in a pan.\n2. Chop the scallion and the red pepper.\n3. Peel and chop the potatos,\n4. Mix everything together and enjoy\n",
+    // }
 
 //use summarize for this? maybe?
 
     console.log(typeof(response.body.generations[0].text));
     console.log(result)
     res.json(JSON.stringify(result))
-    connect(JSON.parse(JSON.stringify(result)))
+    // connect(JSON.parse(JSON.stringify(result)))
 })
+
+app.get('/db', (req, res) => {
+  const string = req.query.string;
+
+  console.log(string);
+  const result = {
+    result: string
+  }
+  connect(result)
+  res.json({"status" : 200})
+})
+
 
 async function insert(client, data) {
   await client.db("methacks").collection("cohere").insertOne(data, function(err, res) {

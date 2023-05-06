@@ -10,4 +10,4 @@ const Recipe = () => {
     )
 }
 
-export default Recipe;
+export default Recipe;  
