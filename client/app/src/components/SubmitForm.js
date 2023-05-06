@@ -1,7 +1,4 @@
 import React, { useState } from 'react';
-import Select from 'react-select'
-import ethnicityChoices from './Ethnicity.json';
-import ingredientsChoices from './Ingredients.json';
 
 const SubmitForm = () => {
   const [formData, setFormData] = useState({
@@ -11,7 +8,6 @@ const SubmitForm = () => {
     difficulty: ''
   });
   const [submitting, setSubmitting] = useState(false);
-  const [hasData, setHasData] = useState(false);
   const [data, setData] = useState("");
 
   const handleChange = (event) => {
@@ -23,31 +19,21 @@ const SubmitForm = () => {
     event.preventDefault();
     setSubmitting(true);
 
-    fetch('http://localhost:27017/generate', {
+    const response = await fetch('http://localhost:27017/generate', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify(formData),
-    })
-        .then((response) => response.json())
-        .then((data) => {setData(data)});
+    });
     
-    setHasData(true);
-    alert('Data submitted successfully');
+    const data = await response.json();
+    console.log(JSON.parse(data).result)
+    setData(JSON.parse(data).result);
 
-    console.log(formData)
     setSubmitting(false);
-    console.log(data)
   };
 
-  if (hasData) {
-    return (
-        <>
-            {data.result}
-        </>
-    )
-  } else {
     return (
         <div>
           <h1>Submit Data</h1>
@@ -98,9 +84,14 @@ const SubmitForm = () => {
             </button>
 
           </form>
+          {data && (
+            <div>
+                {data}
+            </div>
+          )}
         </div>
       );
-  }
+  
   
 };
 

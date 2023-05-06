@@ -38,7 +38,7 @@ app.post('/generate', async (req, res) => {
 
     const response = await cohere.generate({
       model: "command",
-      prompt: "You need to provide a full response, the recipe has to be complete. Your dish title must be short and concise. You can only use a max token of 500, wrap up all necessary information within 400 tokens. At the end of your response, you must type 'DONE' on a standalone line. You need to provide a recipe in the format of dish name, ethnicity, ingredients and steps, each begin with a new line. You have to use " + testData.food + " You have to make a " + testData.cuisine + " dish, and the time it takes have to be " + testData.time + " and the difficulty must be " + testData.difficulty,
+      prompt: "You need to provide a full response, the recipe has to be complete. Your dish title must be short and concise. You can only use a max token of 500, wrap up all necessary information within 400 tokens. You need to provide a recipe in the format of dish name, ethnicity, ingredients and steps, each begin with a new line. You have to use " + data.food + " Your dish absolutely has to be in " + data.cuisine + "culture, and the time it takes have to be " + data.time + " and the difficulty must be " + data.difficulty,
       max_tokens: 1000,
       temperature: 1,
     });
@@ -48,20 +48,15 @@ app.post('/generate', async (req, res) => {
     }
 
     const result2 = {
-      "name": "Broccoli Beef",
-      "ethnicity": "Asian",
-      "ingredients": "1 pound ground beef\n1 bunch scallion\n2 potatos\n1 red pepper\n",
-      "steps": "1. Cook the beef in a pan.\n2. Chop the scallion and the red pepper.\n3. Peel and chop the potatos,\n4. Mix everything together and enjoy\n"
+      "result": "Broccoli Beef\nIngredients:\n1 pound ground beef\n1 bunch scallion\n2 potatos\n1 red pepper\nSteps:\n1. Cook the beef in a pan.\n2. Chop the scallion and the red pepper.\n3. Peel and chop the potatos,\n4. Mix everything together and enjoy\n",
     }
+
+//use summarize for this? maybe?
 
     console.log(typeof(response.body.generations[0].text));
     console.log(result)
-    res.json(JSON.stringify(result2))
-    connect(JSON.parse(JSON.stringify(result2)))
-})
-
-app.get("/mongo", async (req, res) => {
-  connect();
+    res.json(JSON.stringify(result))
+    connect(JSON.parse(JSON.stringify(result)))
 })
 
 async function insert(client, data) {

@@ -8,7 +8,7 @@ const HomePage = () => {
     const [error, setError] = useState(null);
   
     useEffect(() => {
-      fetch('http://localhost:4000/test')
+      fetch('http://localhost:27017/test')
         .then((response) => {
           if (!response.ok) {
             throw new Error('Network response was not ok');
