@@ -12,6 +12,7 @@ cohere.init("MGAAT2e4klv8XjGbVz9RadJEQ4hro2qts6PX8Dim");
 const mongoose = require("mongoose");
 const { MongoClient } = require("mongodb");
 const databaseName = "methacks";
+const ObjectId = require('mongodb').ObjectId;
 
 const password = "mongodb+srv://yaobojing:JimYao1234@cluster0.fzznrzn.mongodb.net/?retryWrites=true&w=majority"
 
@@ -19,6 +20,11 @@ app.get('/', (req, res) => {
   res.json({"hi":'Hello World!'});
 });
 
+
+app.get('/top', async (req, res) => {
+    const result = await connectTop();
+    res.json(result)
+})
 
 app.get('/test', (req, res) => {
     res.json({"not good":"Hey again!"});
@@ -42,7 +48,7 @@ app.post('/generate', async (req, res) => {
 
     const response = await cohere.generate({
       model: "command",
-      prompt: "You need to provide a full response, the recipe has to be complete. Your dish title must be short and concise. You can only use a max token of 500, wrap up all necessary information within 400 tokens. You need to provide a recipe in the format of dish name, ethnicity, ingredients and steps, each begin with a new line. There cannot be more than 10 ingreients. You have to use " + data.food + " Your dish absolutely has to be in " + data.cuisine + "culture, and the time it takes have to be " + data.time + " and the difficulty must be " + data.difficulty,
+      prompt: "Provide a recipe utilizing " + data.food + ". The recipe needs to be " + data.cuisine + " cuisine. There can only be 10 max ingredients. The difficulty of this recipe should be " + data.difficulty + " and the recipe should be " + data.time + " to make. You must give this recipe a name on the first line. You must write heading for ingredients and steps. The steps must all be numbered",
       max_tokens: 1000,
       temperature: 1,
     });
@@ -57,9 +63,11 @@ app.post('/generate', async (req, res) => {
 
     const result = {
       "tags": tags,
-      "result": response.body.generations[0].text
+      "result": response.body.generations[0].text,
+      "score": 0
     }
 
+    console.log(result)
     res.json(JSON.stringify(result))
     connect(JSON.parse(JSON.stringify(result)))
 })
@@ -75,6 +83,41 @@ app.post('/db2', async (req, res) => {
   res.json({"status" : 200})
 })
 
+app.get('/add/:id', async (req, res) => {
+  await connectPoints(1, req.params.id);
+  res.sendStatus(200)
+})
+
+app.get('/take/:id', async (req, res) => {
+  await connectPoints(-1, req.params.id);
+  res.sendStatus(200)
+})
+
+app.get('/:id', async (req, res) => {
+  const result = await connectFind(req.params.id);
+  console.log(result)
+  res.json(result)
+})
+
+
+async function connectFind(id) {
+  const uri = "mongodb+srv://yaobojing:JimYao1234@cluster0.fzznrzn.mongodb.net/?retryWrites=true&w=majority"
+  const client = new MongoClient(uri);
+  try {
+    await client.connect();
+    const result = await find(client, id);
+    return result;
+  } catch (e) {
+    console.error(e);
+  } finally {
+    await client.close();
+  }
+}
+
+async function find(client, id) {
+  const result = await client.db("methacks").collection("cohere").findOne({_id: new ObjectId(id)})
+  return result
+}
 
 async function insert(client, data) {
   await client.db("methacks").collection("cohere").insertOne(data, function(err, res) {
@@ -82,6 +125,29 @@ async function insert(client, data) {
     console.log("1 inserted");
     db.close();
   })
+}
+
+async function top(client) {
+  const result = await client.db("methacks").collection("cohere").find().sort({ score: -1 }).limit(5);
+  const processed = await result.toArray();
+  console.log(processed)
+  return processed;
+
+}
+
+async function connectTop() {
+  const uri = "mongodb+srv://yaobojing:JimYao1234@cluster0.fzznrzn.mongodb.net/?retryWrites=true&w=majority"
+  const client = new MongoClient(uri);
+  try {
+    await client.connect();
+    const result = await top(client);
+    
+    return result;
+  } catch (e) {
+    console.error(e);
+  } finally {
+    await client.close();
+  }
 }
 
 async function connectRandom(){
@@ -95,8 +161,28 @@ async function connectRandom(){
     console.error(e);
   } finally {
     await client.close();
-    
   }
+}
+
+async function connectPoints(value, id){
+  const uri = "mongodb+srv://yaobojing:JimYao1234@cluster0.fzznrzn.mongodb.net/?retryWrites=true&w=majority"
+  const client = new MongoClient(uri);
+  try {
+    await client.connect();
+    await points(client, value, id);
+  } catch (e) {
+    console.error(e);
+  } finally {
+    await client.close();
+  }
+}
+
+async function points(client, value, id){
+  await client.db("methacks").collection("cohere").findOneAndUpdate(
+    {_id: new ObjectId(id)},
+    { $inc: { score: value } },
+    { returnOriginal: false }
+  );
 }
 
 async function random(client){
