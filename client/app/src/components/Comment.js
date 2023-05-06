@@ -4,7 +4,20 @@ const Comment = (props) => {
     const [text, setText] = useState('');
     const [comments, setComments] = useState([]);
 
-
+    const fetchComments = async () => {
+      try {
+        const response = await fetch('http://localhost:27017/comments');
+        const data = await response.json();
+        setComments(data);
+      } catch (error) {
+        console.error('Error fetching comments:', error);
+      }
+    };
+  
+    useEffect(() => {
+      fetchComments();
+    }, []);
+    
     const itemId = props.id
     console.log(itemId);
     const handleNameChange = (e) => {
@@ -14,6 +27,7 @@ const Comment = (props) => {
     const handleTextChange = (e) => {
       setText(e.target.value);
     };
+
     const handleSubmit = async () => {
         const data = {
           name,
@@ -43,7 +57,7 @@ const Comment = (props) => {
 
     return (
         <>
-            <div>
+            <div className="row">
                 <div>
                     <label htmlFor="name">Name:</label>
                     <input
@@ -65,6 +79,16 @@ const Comment = (props) => {
                 </div>
             </div>
             <button onClick={handleSubmit}>Submit</button>
+            <div className="row">
+              <h2>Comments:</h2>
+              <ul>
+                {comments.map((comment, index) => (
+                  <li key={index}>
+                    {comment.name}: {comment.text}
+                  </li>
+                ))}
+              </ul>
+            </div>
         </>
     )
 }

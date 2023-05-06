@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import { Link  } from "react-router-dom";
+import Loading from './Loading';
 
 const SubmitForm = () => {
+const [isLoading, setIsLoading] = useState(false);
+
   const [formData, setFormData] = useState({
     ingredients: '',
     ethnicity: '',
@@ -36,6 +39,7 @@ const sendDb = async () => {
   };
 
   const handleSubmit = async (event) => {
+    setIsLoading(true);
     event.preventDefault();
     setSubmitting(true);
     console.log(formData)
@@ -55,96 +59,102 @@ const sendDb = async () => {
     setSubmitting(false);
     localStorage.setItem('prompt', formData);
     localStorage.setItem('result', JSON.parse(data).result);
+    setIsLoading(false)
   };
 
     return (
-        <div>
-            {data ? (
-                <div>
+        <>
+            {isLoading ? (
+                <Loading></Loading>
+            ):(
                     <div>
-                        {data}
-                    </div>
-                    <div>
-                        <button color="primary" className="px-4"
-                            onClick={sendDb}>
-                                {/* on click animation here */}
-                                Like!
-                            </button>
-                        <button color="primary" 
-                            onClick={reset}>
-                                Generate Another!
-                            </button>
-
-                    </div>
-                </div>
-            )
-            : (
-                <div>
-                    <div className="row">
-                        <div className="col"/>
-                        <div className="col">
-                            <div className="text-6xl font-bold ">
-                                Make A Recipe!
+                    {data ? (
+                        <div>
+                            <div>
+                                {data}
                             </div>
-                            <div className="h-[15vh]"></div>
-                            <div className="w-[60vw] bg-[#d2ff70] py-10 h-[30vh]">
-                                <form onSubmit={handleSubmit} className="h-full">
-                                    <div className="row h-[20%] py-2 pr-8">
-                                    <label className="col" htmlFor="ingredients">Ingredients:</label>
-                                    <input className="col"
-                                        id="ingredients"
-                                        name="ingredients"
-                                        value={formData.ingredients}
-                                        onChange={handleChange}
-                                        required
-                                    />
-                                    </div>
-                                    <div className="row h-[20%] py-2 pr-8">
-                                    <label className="col" htmlFor="ethnicity">Ethnicity:</label>
-                                    <input className="col"
-                                        id="ethnicity"
-                                        name="ethnicity"
-                                        value={formData.ethnicity}
-                                        onChange={handleChange}
-                                        required
-                                    />
-                                    </div>
-                                    <div className="row h-[20%] py-2 pr-8">
-                                    <label className="col" htmlFor="time">Time:</label>
-                                    <input className="col"
-                                        id="time"
-                                        name="time"
-                                        value={formData.time}
-                                        onChange={handleChange}
-                                        required
-                                    />
-                                    </div>
-                                    <div className="row h-[20%] py-2 pr-8">
-                                    <label className="col" htmlFor="difficulty">Difficulty:</label>
-                                    <input className="col"
-                                        id="difficulty"
-                                        name="difficulty"
-                                        value={formData.difficulty}
-                                        onChange={handleChange}
-                                        required
-                                    />
-                                    </div>
-                            
-                                    <button  className="h-[20%] py-2 pr-8" type="submit" disabled={submitting}>
-                                    {submitting ? 'Submitting...' : 'Submit'}
+                            <div>
+                                <button color="primary" className="px-4"
+                                    onClick={sendDb}>
+                                        {/* on click animation here */}
+                                        Like!
                                     </button>
-                                </form>
-                                </div>
+                                <button color="primary" 
+                                    onClick={reset}>
+                                        Generate Another!
+                                    </button>
+        
+                            </div>
                         </div>
-                        <div className="col"/>
-                    
-                    </div>
+                    )
+                    : (
+                        <div>
+                            <div className="row">
+                                <div className="col"/>
+                                <div className="col">
+                                    <div className="text-6xl font-bold ">
+                                        Make A Recipe!
+                                    </div>
+                                    <div className="h-[15vh]"></div>
+                                    <div className="w-[60vw] bg-[#d2ff70] py-10 h-[30vh]">
+                                        <form onSubmit={handleSubmit} className="h-full">
+                                            <div className="row h-[20%] py-2 pr-8">
+                                            <label className="col" htmlFor="ingredients">Ingredients:</label>
+                                            <input className="col"
+                                                id="ingredients"
+                                                name="ingredients"
+                                                value={formData.ingredients}
+                                                onChange={handleChange}
+                                                required
+                                            />
+                                            </div>
+                                            <div className="row h-[20%] py-2 pr-8">
+                                            <label className="col" htmlFor="ethnicity">Ethnicity:</label>
+                                            <input className="col"
+                                                id="ethnicity"
+                                                name="ethnicity"
+                                                value={formData.ethnicity}
+                                                onChange={handleChange}
+                                                required
+                                            />
+                                            </div>
+                                            <div className="row h-[20%] py-2 pr-8">
+                                            <label className="col" htmlFor="time">Time:</label>
+                                            <input className="col"
+                                                id="time"
+                                                name="time"
+                                                value={formData.time}
+                                                onChange={handleChange}
+                                                required
+                                            />
+                                            </div>
+                                            <div className="row h-[20%] py-2 pr-8">
+                                            <label className="col" htmlFor="difficulty">Difficulty:</label>
+                                            <input className="col"
+                                                id="difficulty"
+                                                name="difficulty"
+                                                value={formData.difficulty}
+                                                onChange={handleChange}
+                                                required
+                                            />
+                                            </div>
+                                    
+                                            <button  className="h-[20%] py-2 pr-8" type="submit" disabled={submitting}>
+                                            {submitting ? 'Submitting...' : 'Submit'}
+                                            </button>
+                                        </form>
+                                        </div>
+                                </div>
+                                <div className="col"/>
+                            
+                            </div>
+                        </div>
+                    )
+                }
                 </div>
-            )
-        }
-          
-          
-        </div>
+            )}
+        </>
+
       );
   
   

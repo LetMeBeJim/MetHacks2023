@@ -107,6 +107,32 @@ app.post('/comments', async (req, res) => {
   res.sendStatus(200)
 })
 
+app.get('/comments', async (req, res) => {
+  response = await connectGetComments();
+  result = response.json()
+  res.json(result)
+})
+
+async function connectGetComments() {
+  const uri = "mongodb+srv://yaobojing:JimYao1234@cluster0.fzznrzn.mongodb.net/?retryWrites=true&w=majority"
+  const client = new MongoClient(uri);
+  try {
+    await client.connect();
+    await getComments(client)
+
+  } catch (e) {
+    console.error(e);
+  } finally {
+    await client.close();
+  }
+}
+
+async function getComments(client) {
+  const result = await client.db("methacks").collection("cohere").find({ text: { $exists: true } })
+  const processed = await result.toArray();
+  return processed;
+}
+
 async function connectComments(info) {
   const uri = "mongodb+srv://yaobojing:JimYao1234@cluster0.fzznrzn.mongodb.net/?retryWrites=true&w=majority"
   const client = new MongoClient(uri);
@@ -123,7 +149,7 @@ async function connectComments(info) {
 }
 
 async function comments(client, info){
-  const result = await client.db("methacks").collection("cohere").insertOne({entry: info.itemId, name: info.name, text: info.text})
+  await client.db("methacks").collection("cohere").insertOne({entry: info.itemId, name: info.name, text: info.text})
 }
 
 async function connectFind(id) {
