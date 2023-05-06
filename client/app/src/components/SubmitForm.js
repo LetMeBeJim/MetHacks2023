@@ -36,59 +36,65 @@ const SubmitForm = () => {
 
     return (
         <div>
-          <h1>Submit Data</h1>
-          <form onSubmit={handleSubmit}>
-            <div>
-              <label htmlFor="ingredients">Ingredients:</label>
-              <input
-                id="ingredients"
-                name="ingredients"
-                value={formData.ingredients}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div>
-              <label htmlFor="ethnicity">Ethnicity:</label>
-              <input
-                id="ethnicity"
-                name="ethnicity"
-                value={formData.ethnicity}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div>
-              <label htmlFor="time">Time:</label>
-              <input
-                id="time"
-                name="time"
-                value={formData.time}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div>
-              <label htmlFor="difficulty">Difficulty:</label>
-              <input
-                id="difficulty"
-                name="difficulty"
-                value={formData.difficulty}
-                onChange={handleChange}
-                required
-              />
-            </div>
-    
-            <button type="submit" disabled={submitting}>
-              {submitting ? 'Submitting...' : 'Submit'}
-            </button>
-
-          </form>
-          {data && (
-            <div>
-                {data}
-            </div>
-          )}
+            {data ? (
+                <div>
+                    {data}
+                </div>
+            )
+            : (
+                <div>
+                    <h1>Submit Data</h1>
+                    <form onSubmit={handleSubmit}>
+                        <div>
+                        <label htmlFor="ingredients">Ingredients:</label>
+                        <input
+                            id="ingredients"
+                            name="ingredients"
+                            value={formData.ingredients}
+                            onChange={handleChange}
+                            required
+                        />
+                        </div>
+                        <div>
+                        <label htmlFor="ethnicity">Ethnicity:</label>
+                        <input
+                            id="ethnicity"
+                            name="ethnicity"
+                            value={formData.ethnicity}
+                            onChange={handleChange}
+                            required
+                        />
+                        </div>
+                        <div>
+                        <label htmlFor="time">Time:</label>
+                        <input
+                            id="time"
+                            name="time"
+                            value={formData.time}
+                            onChange={handleChange}
+                            required
+                        />
+                        </div>
+                        <div>
+                        <label htmlFor="difficulty">Difficulty:</label>
+                        <input
+                            id="difficulty"
+                            name="difficulty"
+                            value={formData.difficulty}
+                            onChange={handleChange}
+                            required
+                        />
+                        </div>
+                
+                        <button type="submit" disabled={submitting}>
+                        {submitting ? 'Submitting...' : 'Submit'}
+                        </button>
+                    </form>
+                </div>
+            )
+        }
+          
+          
         </div>
       );
   
