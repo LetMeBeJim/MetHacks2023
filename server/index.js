@@ -117,8 +117,6 @@ app.get('/:id', async (req, res) => {
   res.json(result)
 })
 
-
-
 async function connectGetComments(id) {
   const uri = "mongodb+srv://yaobojing:JimYao1234@cluster0.fzznrzn.mongodb.net/?retryWrites=true&w=majority"
   const client = new MongoClient(uri);
@@ -265,6 +263,5 @@ async function connect(data){
       await client.close();
   }
 }
-
 
 app.listen(process.env.PORT || 27017, () => { console.log("Server started")})
