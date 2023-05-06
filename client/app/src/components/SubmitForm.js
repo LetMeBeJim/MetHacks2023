@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import Select from 'react-select'
+import ethnicityChoices from './Ethnicity.json';
+import ingredientsChoices from './Ingredients.json';
 
 const SubmitForm = () => {
   const [formData, setFormData] = useState({
@@ -8,7 +11,9 @@ const SubmitForm = () => {
     difficulty: ''
   });
   const [submitting, setSubmitting] = useState(false);
+  const [hasData, setHasData] = useState(false);
   const [error, setError] = useState(null);
+  const [data, setData] = useState("");
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -19,80 +24,86 @@ const SubmitForm = () => {
     event.preventDefault();
     setSubmitting(true);
 
-    try {
-      const response = await fetch('http://localhost:4000/generate', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
 
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
+    fetch('http://localhost:27017/generate', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(formData),
+    })
+        .then((response) => response.json())
+        .then((data) => {console.log(data); setData(data)});
+    
+    setHasData(true);
+    alert('Data submitted successfully');
 
-      alert('Data submitted successfully');
-    } catch (error) {
-      setError(error);
-    } finally {
-      setSubmitting(false);
-    }
     console.log(formData)
+    setSubmitting(false);
+    console.log(data)
   };
 
-  return (
-    <div>
-      <h1>Submit Data</h1>
-      {error && <p>Error: {error.message}</p>}
-      <form onSubmit={handleSubmit}>
+  if (hasData) {
+    return (
+        <>
+            {data.result}
+        </>
+    )
+  } else {
+    return (
         <div>
-          <label htmlFor="ingredients">Ingredients:</label>
-          <input
-            id="ingredients"
-            name="ingredients"
-            value={formData.ingredients}
-            onChange={handleChange}
-            required
-          />
+          <h1>Submit Data</h1>
+          {error && <p>Error: {error.message}</p>}
+          <form onSubmit={handleSubmit}>
+            <div>
+              <label htmlFor="ingredients">Ingredients:</label>
+              <input
+                id="ingredients"
+                name="ingredients"
+                value={formData.ingredients}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div>
+              <label htmlFor="ethnicity">Ethnicity:</label>
+              <input
+                id="ethnicity"
+                name="ethnicity"
+                value={formData.ethnicity}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div>
+              <label htmlFor="time">Time:</label>
+              <input
+                id="time"
+                name="time"
+                value={formData.time}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div>
+              <label htmlFor="difficulty">Difficulty:</label>
+              <input
+                id="difficulty"
+                name="difficulty"
+                value={formData.difficulty}
+                onChange={handleChange}
+                required
+              />
+            </div>
+    
+            <button type="submit" disabled={submitting}>
+              {submitting ? 'Submitting...' : 'Submit'}
+            </button>
+          </form>
         </div>
-        <div>
-          <label htmlFor="ethnicity">Ethnicity:</label>
-          <input
-            id="ethnicity"
-            name="ethnicity"
-            value={formData.ethnicity}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="time">Time:</label>
-          <input
-            id="time"
-            name="time"
-            value={formData.time}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="difficulty">Difficulty:</label>
-          <input
-            id="difficulty"
-            name="difficulty"
-            value={formData.difficulty}
-            onChange={handleChange}
-            required
-          />
-        </div>
-
-        <button type="submit" disabled={submitting}>
-          {submitting ? 'Submitting...' : 'Submit'}
-        </button>
-      </form>
-    </div>
-  );
+      );
+  }
+  
 };
 
 export default SubmitForm;

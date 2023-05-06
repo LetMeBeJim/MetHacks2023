@@ -2,12 +2,14 @@ const cors = require('cors');
 const mongoose = require("mongoose");
 const express = require('express');
 const app = express();
-
+const { MongoClient } = require("mongodb");
 const cohere = require("cohere-ai");
 cohere.init("MGAAT2e4klv8XjGbVz9RadJEQ4hro2qts6PX8Dim");
-
+const databaseName = "methacks";
 app.use(express.json());
 app.use(cors());
+
+const password = "mongodb+srv://yaobojing:JimYao1234@cluster0.fzznrzn.mongodb.net/?retryWrites=true&w=majority"
 
 app.get('/', (req, res) => {
   res.json({"hi":'Hello World!'});
@@ -18,10 +20,6 @@ app.get('/test', (req, res) => {
     res.json({"not good":"Hey again!"});
 })
 
-app.post('/testpost', (req, res) => {
-  console.log(req.body);
-  res.send(req.body);
-})
 
 app.post('/generate', async (req, res) => {
     const data = await req.body;
@@ -41,8 +39,40 @@ app.post('/generate', async (req, res) => {
       temperature: 1,
     });
 
-    console.log(response.body.generations[0].text);
-    res.json(response.body.generations[0].text)
+    const result = {
+      "result": response.body.generations[0].text
+    }
+
+    const result2 = {
+      "name": "Broccoli Beef",
+      "ethnicity": "Asian",
+      "ingredients": "1 pound ground beef\n1 bunch scallion\n2 potatos\n1 red pepper\n",
+      "steps": "1. Cook the beef in a pan.\n2. Chop the scallion and the red pepper.\n3. Peel and chop the potatos,\n4. Mix everything together and enjoy\n"
+    }
+
+    console.log(typeof(response.body.generations[0].text));
+    console.log(result)
+    res.json(JSON.stringify(result2))
 })
 
-app.listen(process.env.PORT || 4000, () => { console.log("Server started")})
+MongoClient.connect(password,
+  { useNewUrlParser: true },
+  function(err, db) {
+    if (err) {
+      console.log(err)
+      return console.log(err);
+    }
+  console.log("Connection established - All Well");
+  var dbo = db.db(databaseName)
+
+  app.get('/mongo', (req, res) => {
+    dbo.collection("cohere").insertOne({"hi": "it works"});
+    res.send("hey")
+  })
+  }
+)
+
+
+
+
+app.listen(process.env.PORT || 27017, () => { console.log("Server started")})
