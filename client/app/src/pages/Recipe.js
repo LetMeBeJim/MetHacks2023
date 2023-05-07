@@ -20,8 +20,8 @@ const Recipe = () => {
         <>
             <div>
                 {data ? (
-                    <div className="random">
-                        <h1 className="h-[5vh]">Random Entries!</h1>
+                    <div className="random font-urbanist">
+                        <h1 className="h-[5vh]">Recipe Entries!</h1>
                         <div className="row mx-4 my-2 h-[80vh] overflow-hidden">
                             <div className="transition duration-300 ease-in-out hover:scale-[1.01] h-full col bg-[#d2ff70] mx-2 overflow-hidden border-black rounded-3xl">
                                 <Score id={data[0]._id} score={data[0].score}/>

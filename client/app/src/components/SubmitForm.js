@@ -50,7 +50,7 @@ const sendDb = async () => {
         },
         body: JSON.stringify(formData),
     });
-    
+
     const data = await response.json();
     console.log(data)
     console.log(JSON.parse(data).result)
@@ -71,14 +71,14 @@ const sendDb = async () => {
                     {data ? (
                         <div className=" w-[100vw] bg-[#d2ff70] py-10 h-[60vh] rounded-full font-urbanist self-center">
                             <div className="my-10000">
-                                {data}
+                                {data.split(". ").map(place => <p> {place} </p>)}
                             </div>
                             <div>
-                                <button color="primary" className="px-4 h-[10%] py-1 pr-6 bg-blue-500 hover:bg-blue-700 text-white font-bold border border-blue-700 rounded-full text-center"
+                                <button color="primary" className="px-4 h-[10%] py-1 pr-6 bg-blue-500 hover:bg-blue-700 text-white font-bold border border-blue-700 rounded text-center"
                                     onClick={sendDb}>
                                         Like!
                                     </button>
-                                <button classname="px-4 h-[10%] py-1 pr-6 bg-blue-500 hover:bg-blue-700 text-white font-bold border border-blue-700 rounded-full text-center"
+                                <button classname="px-4 h-[10%] py-1 pr-6 bg-blue-500 hover:bg-blue-700 text-white font-bold border border-blue-700 rounded text-center"
                                     onClick={reset}>
                                         Generate Another!
                                     </button>
@@ -145,7 +145,7 @@ const sendDb = async () => {
                                             />
                                             </div>
                                             <div>
-                                            <button className="h-[10%] py-1 pr-6 bg-blue-500 hover:bg-blue-700 text-white font-bold border border-blue-700 rounded-full text-center"
+                                            <button className="px-3 h-[10%] py-1 pr-6 bg-blue-500 hover:bg-blue-700 text-white font-bold border border-blue-700 rounded text-center"
                                             type="submit" 
                                             disabled={submitting}>
                                             {submitting ? 'Submitting...' : 'Submit'}
