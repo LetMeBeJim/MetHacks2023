@@ -78,7 +78,7 @@ const sendDb = async () => {
                                     onClick={sendDb}>
                                         Like!
                                     </button>
-                                <button classname="px-4 h-[10%] py-1 pr-6 bg-blue-500 hover:bg-blue-700 text-white font-bold border border-blue-700 rounded text-center"
+                                <button className="px-4 h-[10%] py-1 pr-6 bg-blue-500 hover:bg-blue-700 text-white font-bold border border-blue-700 rounded text-center"
                                     onClick={reset}>
                                         Generate Another!
                                     </button>
