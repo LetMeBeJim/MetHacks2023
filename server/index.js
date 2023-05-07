@@ -1,3 +1,5 @@
+var passwords = require('./password')
+
 const express = require('express');
 const app = express();
 app.use(express.json());
@@ -6,7 +8,7 @@ const cors = require('cors');
 app.use(cors());
 
 const cohere = require("cohere-ai");
-cohere.init("MGAAT2e4klv8XjGbVz9RadJEQ4hro2qts6PX8Dim");
+cohere.init(passwords.cohere);
 
 
 const mongoose = require("mongoose");
@@ -14,7 +16,6 @@ const { MongoClient } = require("mongodb");
 const databaseName = "methacks";
 const ObjectId = require('mongodb').ObjectId;
 
-const password = "mongodb+srv://yaobojing:JimYao1234@cluster0.fzznrzn.mongodb.net/?retryWrites=true&w=majority"
 
 app.get('/', (req, res) => {
   res.json({"hi":'Hello World!'});
@@ -118,7 +119,7 @@ app.get('/:id', async (req, res) => {
 })
 
 async function connectGetComments(id) {
-  const uri = "mongodb+srv://yaobojing:JimYao1234@cluster0.fzznrzn.mongodb.net/?retryWrites=true&w=majority"
+  const uri = passwords.mongoPass
   const client = new MongoClient(uri);
   try {
     await client.connect();
@@ -138,7 +139,7 @@ async function getComments(client, id) {
 }
 
 async function connectComments(info) {
-  const uri = "mongodb+srv://yaobojing:JimYao1234@cluster0.fzznrzn.mongodb.net/?retryWrites=true&w=majority"
+  const uri = passwords.mongoPass
   const client = new MongoClient(uri);
   try {
     await client.connect();
@@ -157,7 +158,7 @@ async function comments(client, info){
 }
 
 async function connectFind(id) {
-  const uri = "mongodb+srv://yaobojing:JimYao1234@cluster0.fzznrzn.mongodb.net/?retryWrites=true&w=majority"
+  const uri = passwords.mongoPass
   const client = new MongoClient(uri);
   try {
     await client.connect();
@@ -192,7 +193,7 @@ async function top(client) {
 }
 
 async function connectTop() {
-  const uri = "mongodb+srv://yaobojing:JimYao1234@cluster0.fzznrzn.mongodb.net/?retryWrites=true&w=majority"
+  const uri = passwords.mongoPass
   const client = new MongoClient(uri);
   try {
     await client.connect();
@@ -207,7 +208,7 @@ async function connectTop() {
 }
 
 async function connectRandom(){
-  const uri = "mongodb+srv://yaobojing:JimYao1234@cluster0.fzznrzn.mongodb.net/?retryWrites=true&w=majority"
+  const uri = passwords.mongoPass
   const client = new MongoClient(uri);
   try {
     await client.connect();
@@ -221,7 +222,7 @@ async function connectRandom(){
 }
 
 async function connectPoints(value, id){
-  const uri = "mongodb+srv://yaobojing:JimYao1234@cluster0.fzznrzn.mongodb.net/?retryWrites=true&w=majority"
+  const uri = passwords.mongoPass
   const client = new MongoClient(uri);
   try {
     await client.connect();
@@ -250,7 +251,7 @@ async function random(client){
 }
 
 async function connect(data){
-  const uri = "mongodb+srv://yaobojing:JimYao1234@cluster0.fzznrzn.mongodb.net/?retryWrites=true&w=majority"
+  const uri = passwords.mongoPass
   const client = new MongoClient(uri);
  
   try {
