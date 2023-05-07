@@ -4,7 +4,7 @@ const EntryTransition = (props) => {
     console.log("Prop value is: " + props.value);
     return (
         <>
-        <motion.div className="absolute z-50 bg-[#e8ffc4] w-[100vw] h-[18.6vh] rounded-tr-full rounded-br-full right-full"
+        <motion.div className="absolute z-50 bg-[#ffb759] w-[100vw] h-[18.6vh] rounded-tr-full rounded-br-full right-full"
             transition={{ ease: "easeOut", duration: 1, times: [0,0.5,1] }}
             animate={{
                 x: [0, window.innerWidth, 0+70]
@@ -12,7 +12,7 @@ const EntryTransition = (props) => {
             exit={{x: window.innerwidth}}>
         </motion.div>
 
-        <motion.div className="absolute z-50 bg-[#fbffe6] w-[100vw] top-[25.6vh] h-[18.6vh] rounded-tr-full rounded-br-full right-full"
+        <motion.div className="absolute z-50 bg-[#ffe159] w-[100vw] top-[25.6vh] h-[18.6vh] rounded-tr-full rounded-br-full right-full"
             transition={{ ease: "easeOut", duration: 0.85, times: [0,0.5,1]}}
             animate={{
                 x: [0, window.innerWidth, 0+70]
